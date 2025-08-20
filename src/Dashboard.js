@@ -178,68 +178,14 @@ export default function Dashboard({ user, onLogout }) {
       </header>
 
       <div className={styles.mainContent}>
-        {/* Calendario e informazioni in un unico pannello */}
+        {/* Pannello principale vuoto per ora */}
         <div className={styles.calendarSection}>
-          <SimpleCalendar
-            selectedDate={selectedDate}
-            onDateChange={handleDateChange}
-            appointments={getDisplayedAppointments()}
-            user={user}
-            viewFilter={viewFilter}
-          />
-          
-          {/* Sezione informazioni data integrata nel calendario */}
+          <SimpleCalendar selectedDate={selectedDate} onDateChange={handleDateChange} />
+
+          {/* Sezione informazioni data integrata */}
           <div className={styles.dateInfo}>
             <h3>{formatDate(selectedDate)}</h3>
-            
-            {getAppointmentsForDate(selectedDate).length === 0 ? (
-              <p className={styles.noEvents}>Nessun appuntamento</p>
-            ) : (
-              <div className={styles.dayAppointments}>
-                {getAppointmentsForDate(selectedDate).map(apt => (
-                  <div key={apt.id} className={styles.appointmentCard}>
-                    <div className={styles.appointmentHeader}>
-                      <div className={styles.appointmentTitle}>{apt.title}</div>
-                      <div className={styles.appointmentTime}>
-                        {formatTime(apt.start_time)} - {formatTime(apt.end_time)}
-                      </div>
-                    </div>
-                    
-                    {apt.description && (
-                      <div className={styles.appointmentDescription}>{apt.description}</div>
-                    )}
-                    
-                    <div className={styles.appointmentMeta}>
-                      <div className={styles.creator}>
-                        Creato da: {apt.created_by === user.email ? 'Te' : apt.creator?.name || apt.created_by}
-                      </div>
-                      <div className={styles.participants}>
-                        Partecipanti: {apt.appointments_users.length}/2
-                      </div>
-                    </div>
-
-                    <div className={styles.appointmentActions}>
-                      {canJoinAppointment(apt) && (
-                        <button 
-                          className={styles.joinButton}
-                          onClick={() => joinAppointment(apt.id)}
-                        >
-                          Unisciti
-                        </button>
-                      )}
-                      {isUserParticipating(apt) && apt.created_by !== user.email && (
-                        <button 
-                          className={styles.leaveButton}
-                          onClick={() => leaveAppointment(apt.id)}
-                        >
-                          Abbandona
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+            <p className={styles.noEvents}>Nessun appuntamento</p>
           </div>
         </div>
       </div>

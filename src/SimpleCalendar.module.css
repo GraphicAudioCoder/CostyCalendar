@@ -7,6 +7,68 @@
   font-family: 'Arial', sans-serif;
   width: 100%;
   box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Responsive per mobile */
+@media (max-width: 768px) {
+  .calendar {
+    padding: 2px;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+  
+  .calendarHeader {
+    margin-bottom: 6px;
+    padding: 0 2px;
+  }
+  
+  .monthYear {
+    font-size: 14px;
+  }
+  
+  .navButton {
+    padding: 4px 6px;
+    font-size: 12px;
+    width: 36px;
+    height: 28px;
+  }
+  
+  .daysOfWeek {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    margin-bottom: 2px;
+    width: 100%;
+  }
+  
+  .dayHeader {
+    padding: 2px 1px;
+    font-size: 8px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .calendarGrid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    width: 100%;
+  }
+  
+  .calendarDay,
+  .emptyDay {
+    height: 30px;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
 }
 
 .calendarHeader {

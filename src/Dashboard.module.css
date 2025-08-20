@@ -115,11 +115,12 @@
   display: flex;
   flex-direction: column;
   flex: 1;
-  max-width: 1200px;
+  max-width: none;
   width: 100%;
-  margin: 0 auto;
+  margin: 0;
   padding: 24px;
   min-height: 0;
+  box-sizing: border-box;
 }
 
 /* Sezione calendario unica - Prende tutto lo spazio disponibile */
@@ -127,7 +128,7 @@
   width: 100%;
   background: #23232a;
   border-radius: 12px;
-  padding: 32px;
+  padding: 24px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.2);
   flex: 1;
   display: flex;
@@ -135,10 +136,18 @@
   min-height: 0;
 }
 
-/* Assicurati che il calendario interno prenda tutto lo spazio */
-.calendarSection > * {
+/* Placeholder per il calendario */
+.calendarPlaceholder {
   flex: 1;
-  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #18181b;
+  border-radius: 8px;
+  color: #b3b3b3;
+  font-size: 18px;
+  min-height: 300px;
+  margin-bottom: 20px;
 }
 
 /* Rimuovo il pannello laterale separato */
@@ -315,33 +324,70 @@
 @media (max-width: 768px) {
   .headerContent {
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
   }
   
+  /* Prima riga: Nome utente e Logout - PRIORITÀ MASSIMA */
+  .userInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    order: -1;
+    margin-bottom: 8px;
+  }
+  
+  /* Nascondi il titolo su mobile */
+  .title {
+    display: none;
+  }
+  
+  /* Seconda riga: Filtri e Nuovo */
   .headerActions {
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
     width: 100%;
+    order: 1;
   }
   
   .filterButtons {
     justify-content: center;
+    gap: 4px;
+  }
+  
+  .filterBtn {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+  
+  .newAppointmentButton {
+    padding: 6px 12px;
+    font-size: 12px;
   }
   
   .mainContent {
     padding: 16px;
+    margin: 0;
+    box-sizing: border-box;
   }
   
   .calendarSection {
     padding: 16px;
+    box-sizing: border-box;
+  }
+  
+  .calendarPlaceholder {
+    min-height: 200px;
+    font-size: 14px;
+    margin-bottom: 16px;
   }
   
   .dateInfo {
-    padding: 16px;
-    margin-top: 16px;
+    padding: 12px;
+    margin-top: 12px;
   }
   
   .header {
-    padding: 12px 16px;
+    padding: 8px 16px;
   }
 }
