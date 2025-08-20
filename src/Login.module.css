@@ -144,6 +144,81 @@
   color: #b3b3b3;
 }
 
+/* Overlay per popup */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+/* Popup di conferma */
+.popup {
+  background: #23232a;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.5);
+  width: 90%;
+  max-width: 360px;
+  text-align: center;
+  animation: popupSlideIn 0.3s ease-out;
+}
+
+@keyframes popupSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.popup h3 {
+  margin-bottom: 16px;
+  color: #fafafa;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.popup p {
+  margin-bottom: 16px;
+  color: #b3b3b3;
+}
+
+/* Modal di conferma */
+.confirmModal {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.confirmModal h3 {
+  margin-bottom: 16px;
+  color: #fafafa;
+  font-size: 18px;
+}
+
+.confirmModal p {
+  margin-bottom: 16px;
+  color: #b3b3b3;
+}
+
+.confirmAccount {
+  background: #18181b;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #444;
+}
+
 .buttonGroup {
   display: flex;
   gap: 8px;

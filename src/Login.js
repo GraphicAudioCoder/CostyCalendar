@@ -9,6 +9,8 @@ export default function Login({ onLogin }) {
   const [showNew, setShowNew] = useState(false)
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
+  const [showConfirm, setShowConfirm] = useState(false)
+  const [selectedAccount, setSelectedAccount] = useState(null)
 
   useEffect(() => {
     const fetchAccounts = async () => {
@@ -25,7 +27,19 @@ export default function Login({ onLogin }) {
   }, [])
 
   const handleSelect = (account) => {
-    onLogin(account)
+    setSelectedAccount(account)
+    setShowConfirm(true)
+  }
+
+  const handleConfirmLogin = () => {
+    onLogin(selectedAccount)
+    setShowConfirm(false)
+    setSelectedAccount(null)
+  }
+
+  const handleCancelLogin = () => {
+    setShowConfirm(false)
+    setSelectedAccount(null)
   }
 
   const handleNewAccount = async (e) => {
@@ -106,6 +120,23 @@ export default function Login({ onLogin }) {
           </form>
         )}
       </div>
+      
+      {/* Popup di conferma */}
+      {showConfirm && (
+        <div className={styles.overlay}>
+          <div className={styles.popup}>
+            <h3>Conferma accesso</h3>
+            <div className={styles.confirmAccount}>
+              <div className={styles.accountName}>{selectedAccount?.name}</div>
+              <div className={styles.accountEmail}>{selectedAccount?.email}</div>
+            </div>
+            <div className={styles.buttonGroup}>
+              <button className={styles.loginButton} onClick={handleConfirmLogin}>Conferma</button>
+              <button className={styles.cancelButton} onClick={handleCancelLogin}>Annulla</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
