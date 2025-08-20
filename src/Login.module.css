@@ -1,3 +1,4 @@
+/* Container principale */
 .container {
   display: flex;
   justify-content: center;
@@ -8,6 +9,7 @@
   padding: 16px;
 }
 
+/* Box login */
 .loginBox {
   background: #23232a;
   padding: 32px 24px;
@@ -24,6 +26,7 @@
   color: #fafafa;
 }
 
+/* Campi input */
 .inputField {
   width: 100%;
   padding: 12px;
@@ -36,26 +39,121 @@
   box-sizing: border-box;
 }
 
+/* Pulsante principale */
 .loginButton {
-  width: 200px;
-  margin: 0 auto;
+  width: 100%;
+  min-width: 80px;
   padding: 12px;
-  background-color: #6366f1;
-  color: #fafafa;
+  background-color: #4f46e5;
+  color: white;
   font-weight: bold;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background 0.3s, color 0.3s;
-  display: flex;
-  justify-content: center;
-  box-shadow: 0 2px 8px rgba(99,102,241,0.15);
+  transition: background 0.3s;
 }
 
 .loginButton:hover {
   background-color: #3730a3;
-  color: #fff;
 }
+
+/* Pulsante secondario nella lista account */
+.loginButtonSecondary {
+  width: 100%;
+  min-width: 80px;
+  padding: 12px;
+  background-color: #2d2d34;
+  color: #fafafa;
+  border: 2px solid #2d2d34;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s, border 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loginButtonSecondary:hover {
+  background-color: #37373f;
+  color: #fff;
+  border: 2px solid #37373f;
+}
+
+/* Pulsante Annulla */
+.cancelButton {
+  width: 100%;
+  min-width: 80px;
+  padding: 12px;
+  background-color: #23232a;
+  color: #fafafa;
+  border: 2px solid #23232a;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s, border 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cancelButton:hover {
+  background-color: #393945;
+  color: #fafafa;
+  border: 2px solid #393945;
+}
+
+/* Lista account */
+.accountsList {
+  max-height: 220px;
+  overflow-y: auto;
+  margin-bottom: 18px;
+  border-radius: 8px;
+  background: #18181b;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+
+.centerText {
+  text-align: center;
+  padding: 24px;
+}
+
+ .accountRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  border-bottom: 1px solid #23232a;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+ }
+ .accountRow:hover {
+  background: #292a3a;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.10);
+  transform: scale(1.02);
+ }
+
+.accountName {
+  font-weight: bold;
+  color: #fafafa;
+}
+
+.accountEmail {
+  font-size: 13px;
+  color: #b3b3b3;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 8px;
+}
+
+.loggedInContainer {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
 @media (max-width: 600px) {
   .container {
     align-items: flex-start;
