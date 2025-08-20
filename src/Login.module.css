@@ -1,0 +1,50 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #f0f2f5;
+  font-family: 'Arial', sans-serif;
+}
+
+.loginBox {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  width: 360px;
+}
+
+.loginBox h2 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.inputField {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.loginButton {
+  width: 200px;
+  margin: 0 auto;
+  padding: 12px;
+  background-color: #4f46e5; /* puoi cambiare il colore */
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: flex;
+  justify-content: center;
+}
+
+.loginButton:hover {
+  background-color: #3730a3;
+}

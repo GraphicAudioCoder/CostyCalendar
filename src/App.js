@@ -1,25 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react'
+import Login from './Login'
 
 function App() {
+  const [user, setUser] = useState(null)
+
+  // Se l'utente non è loggato, mostra il login
+  if (!user) {
+    return <Login onLogin={setUser} />
+  }
+
+  // Se l'utente è loggato, mostra un messaggio di benvenuto
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+      <h1>Benvenuto, {user.name}!</h1>
+      <p>Email: {user.email}</p>
+      <p>Qui più avanti verranno mostrati gli appuntamenti.</p>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
