@@ -10,14 +10,16 @@ export default function SimpleCalendar({ selectedDate, onDateChange, appointment
     'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'
   ]
 
-  const daysOfWeek = ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab']
+  // Set week headers to start on Monday
+  const daysOfWeek = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom']
 
   const getDaysInMonth = (month, year) => {
     return new Date(year, month + 1, 0).getDate()
   }
 
   const getFirstDayOfMonth = (month, year) => {
-    return new Date(year, month, 1).getDay()
+    // Shift so week starts on Monday (0 = Monday, ... 6 = Sunday)
+    return (new Date(year, month, 1).getDay() + 6) % 7
   }
 
   const hasAppointments = (day) => {
@@ -98,11 +100,19 @@ export default function SimpleCalendar({ selectedDate, onDateChange, appointment
   return (
     <div className={styles.calendar}>
       <div className={styles.calendarHeader}>
-        <button className={styles.navButton} onClick={previousMonth}>←</button>
+        <button
+          className={`${styles.navButton} ${styles.prev}`}
+          onClick={previousMonth}
+          aria-label="Mese precedente"
+        />
         <h3 className={styles.monthYear}>
           {months[currentMonth]} {currentYear}
         </h3>
-        <button className={styles.navButton} onClick={nextMonth}>→</button>
+        <button
+          className={`${styles.navButton} ${styles.next}`}
+          onClick={nextMonth}
+          aria-label="Mese successivo"
+        />
       </div>
       
       <div className={styles.daysOfWeek}>

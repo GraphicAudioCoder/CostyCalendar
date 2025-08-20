@@ -6,6 +6,8 @@
   font-family: 'Arial', sans-serif;
   display: flex;
   flex-direction: column;
+  /* Safety: avoid horizontal scroll caused by wide children */
+  overflow-x: hidden;
 }
 
 /* Header compatto */
@@ -19,8 +21,8 @@
 
 .headerContent {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: 8px;
   max-width: 1400px;
   margin: 0 auto;
 }
@@ -36,6 +38,7 @@
   display: flex;
   align-items: center;
   gap: 24px;
+  width: 100%;
 }
 
 /* Filtri di visualizzazione */
@@ -88,6 +91,8 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .userName {
@@ -111,24 +116,15 @@
 }
 
 /* Layout principale - Un solo pannello che prende tutto lo spazio */
-.mainContent {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  max-width: none;
-  width: 100%;
-  margin: 0;
-  padding: 24px;
-  min-height: 0;
-  box-sizing: border-box;
-}
+/* mainContent definito più in basso per comportamento flush-left */
 
 /* Sezione calendario unica - Prende tutto lo spazio disponibile */
 .calendarSection {
   width: 100%;
   background: #23232a;
   border-radius: 12px;
-  padding: 24px;
+  /* Keep vertical padding but remove horizontal padding to align with container */
+  padding: 24px 0;
   box-shadow: 0 4px 16px rgba(0,0,0,0.2);
   flex: 1;
   display: flex;
@@ -227,6 +223,24 @@
   margin-bottom: 12px;
 }
 
+.inputField {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #333;
+  background: #121212;
+  color: #fafafa;
+}
+
+.cancelButton {
+  padding: 8px 14px;
+  background: #3b3b45;
+  color: #fafafa;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
 .creator,
 .participants {
   color: #b3b3b3;
@@ -287,20 +301,21 @@
   backdrop-filter: blur(4px);
 }
 
-.modalContent {
-  background: #23232a;
-  padding: 32px;
-  border-radius: 12px;
-  box-shadow: 0 12px 48px rgba(0,0,0,0.5);
-  width: 90%;
-  max-width: 500px;
-  text-align: center;
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  /* Start the main container flush to the left edge of the viewport */
+  max-width: none;
+  width: 100%;
+  margin: 0; /* no centering */
+  padding: 24px 0; /* vertical spacing only */
+  min-height: 0;
+  box-sizing: border-box;
 }
-
-/* Responsive */
 @media (max-width: 1024px) {
   .mainContent {
-    padding: 20px;
+    padding: 20px 0;
   }
   
   .calendarSection {
@@ -313,7 +328,7 @@
   }
   
   .headerActions {
-    gap: 16px;
+  gap: 16px;
   }
   
   .filterButtons {
@@ -344,15 +359,32 @@
   
   /* Seconda riga: Filtri e Nuovo */
   .headerActions {
-    flex-direction: column;
+    /* show filters and new button on the same row */
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     gap: 8px;
     width: 100%;
     order: 1;
   }
-  
+
   .filterButtons {
-    justify-content: center;
-    gap: 4px;
+  display: inline-flex;
+  flex: 0 1 auto;
+    gap: 6px;
+    align-items: center;
+    /* allow horizontal scrolling if there are too many tabs */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .filterButtons::-webkit-scrollbar {
+    display: none;
+  }
+
+  .newAppointmentButton {
+    flex: 0 0 auto;
+    margin-left: 12px;
   }
   
   .filterBtn {

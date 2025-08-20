@@ -29,10 +29,10 @@
   }
   
   .navButton {
+    width: 36px;
+    height: 30px;
     padding: 4px 6px;
     font-size: 12px;
-    width: 36px;
-    height: 28px;
   }
   
   .daysOfWeek {
@@ -83,15 +83,54 @@
   color: #fafafa;
   border: none;
   border-radius: 6px;
-  padding: 8px 12px;
   cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-  transition: background 0.3s;
+  width: 40px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  position: relative;
+  transition: background 0.25s, transform 0.12s;
 }
 
 .navButton:hover {
   background: #3730a3;
+  transform: translateY(-1px);
+}
+
+/* Triangle indicators */
+.navButton.prev::before,
+.navButton.next::before {
+  content: '';
+  display: block;
+  width: 0;
+  height: 0;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+}
+
+.navButton.prev::before {
+  border-right: 10px solid #fafafa;
+}
+
+.navButton.next::before {
+  border-left: 10px solid #fafafa;
+}
+
+/* Keep mobile sizing sensible */
+@media (max-width: 768px) {
+  .navButton {
+    width: 36px;
+    height: 30px;
+  }
+  .navButton.prev::before,
+  .navButton.next::before {
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+  }
+  .navButton.prev::before { border-right: 8px solid #fafafa; }
+  .navButton.next::before { border-left: 8px solid #fafafa; }
 }
 
 .monthYear {
