@@ -74,7 +74,7 @@ export default function Login({ onLogin }) {
   return (
     <div className={styles.container}>
       <div className={styles.loginBox}>
-        <h2>CostyCalendar</h2>
+        <h2>CostyPlanner</h2>
         {error && <p style={{color:'red'}}>{error}</p>}
 
         {!showNew ? (

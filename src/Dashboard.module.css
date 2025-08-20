@@ -1,0 +1,347 @@
+/* Dashboard Layout Collaborativo */
+.dashboard {
+  min-height: 100vh;
+  background: #18181b;
+  color: #fafafa;
+  font-family: 'Arial', sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header compatto */
+.header {
+  background: #23232a;
+  padding: 12px 24px;
+  border-bottom: 1px solid #444;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  flex-shrink: 0;
+}
+
+.headerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #6366f1;
+  margin: 0;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+/* Filtri di visualizzazione */
+.filterButtons {
+  display: flex;
+  gap: 8px;
+  background: #18181b;
+  padding: 4px;
+  border-radius: 8px;
+}
+
+.filterBtn {
+  padding: 6px 12px;
+  background: transparent;
+  color: #b3b3b3;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.filterBtn:hover {
+  background: #292a3a;
+  color: #fafafa;
+}
+
+.filterBtn.active {
+  background: #6366f1;
+  color: #fafafa;
+}
+
+.newAppointmentButton {
+  padding: 8px 16px;
+  background: #6366f1;
+  color: #fafafa;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.newAppointmentButton:hover {
+  background: #3730a3;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.userName {
+  color: #b3b3b3;
+  font-size: 13px;
+}
+
+.logoutButton {
+  padding: 6px 12px;
+  background: #3b3b45;
+  color: #fafafa;
+  border: 1px solid #6366f1;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.3s;
+}
+
+.logoutButton:hover {
+  background: #6366f1;
+}
+
+/* Layout principale - Un solo pannello che prende tutto lo spazio */
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 24px;
+  min-height: 0;
+}
+
+/* Sezione calendario unica - Prende tutto lo spazio disponibile */
+.calendarSection {
+  width: 100%;
+  background: #23232a;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* Assicurati che il calendario interno prenda tutto lo spazio */
+.calendarSection > * {
+  flex: 1;
+  min-height: 0;
+}
+
+/* Rimuovo il pannello laterale separato */
+.sidePanel {
+  display: none;
+}
+
+.dateInfo {
+  background: #18181b;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 24px;
+  border-top: 1px solid #444;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.dateInfo h3 {
+  margin: 0 0 16px 0;
+  color: #6366f1;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.noEvents {
+  color: #b3b3b3;
+  font-style: italic;
+  text-align: center;
+  padding: 20px;
+  margin: 0;
+}
+
+/* Card degli appuntamenti */
+.dayAppointments {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.appointmentCard {
+  background: #18181b;
+  padding: 16px;
+  border-radius: 8px;
+  border-left: 4px solid #6366f1;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.appointmentCard:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(99,102,241,0.15);
+}
+
+.appointmentHeader {
+  margin-bottom: 8px;
+}
+
+.appointmentTitle {
+  color: #fafafa;
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.appointmentTime {
+  color: #b3b3b3;
+  font-size: 12px;
+}
+
+.appointmentDescription {
+  color: #b3b3b3;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.appointmentMeta {
+  margin-bottom: 12px;
+}
+
+.creator,
+.participants {
+  color: #b3b3b3;
+  font-size: 11px;
+  margin-bottom: 2px;
+}
+
+/* Azioni appuntamento */
+.appointmentActions {
+  display: flex;
+  gap: 8px;
+}
+
+.joinButton {
+  padding: 6px 12px;
+  background: #06b6d4;
+  color: #fafafa;
+  border: none;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.joinButton:hover {
+  background: #0891b2;
+}
+
+.leaveButton {
+  padding: 6px 12px;
+  background: #ef4444;
+  color: #fafafa;
+  border: none;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.leaveButton:hover {
+  background: #dc2626;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modalContent {
+  background: #23232a;
+  padding: 32px;
+  border-radius: 12px;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.5);
+  width: 90%;
+  max-width: 500px;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .mainContent {
+    padding: 20px;
+  }
+  
+  .calendarSection {
+    padding: 24px;
+  }
+  
+  .dateInfo {
+    padding: 16px;
+    margin-top: 16px;
+  }
+  
+  .headerActions {
+    gap: 16px;
+  }
+  
+  .filterButtons {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 768px) {
+  .headerContent {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .headerActions {
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+  
+  .filterButtons {
+    justify-content: center;
+  }
+  
+  .mainContent {
+    padding: 16px;
+  }
+  
+  .calendarSection {
+    padding: 16px;
+  }
+  
+  .dateInfo {
+    padding: 16px;
+    margin-top: 16px;
+  }
+  
+  .header {
+    padding: 12px 16px;
+  }
+}

@@ -1,0 +1,123 @@
+/* Calendario personalizzato - Full width */
+.calendar {
+  background: #18181b;
+  border-radius: 8px;
+  padding: 16px;
+  color: #fafafa;
+  font-family: 'Arial', sans-serif;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.calendarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.navButton {
+  background: #6366f1;
+  color: #fafafa;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.navButton:hover {
+  background: #3730a3;
+}
+
+.monthYear {
+  margin: 0;
+  color: #fafafa;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.daysOfWeek {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 8px;
+}
+
+.dayHeader {
+  text-align: center;
+  padding: 8px 4px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #b3b3b3;
+  background: #23232a;
+  border-radius: 4px;
+}
+
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.emptyDay {
+  height: 40px;
+}
+
+.calendarDay {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #23232a;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.3s, transform 0.2s;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.calendarDay:hover {
+  background: #292a3a;
+  transform: scale(1.05);
+}
+
+.calendarDay.today {
+  background: #3b3b45;
+  color: #6366f1;
+  font-weight: bold;
+}
+
+.calendarDay.selected {
+  background: #6366f1 !important;
+  color: #fafafa;
+  font-weight: bold;
+}
+
+.calendarDay.hasAppointments {
+  background: #2d3748;
+  border: 1px solid #06b6d4;
+}
+
+.appointmentDot {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 6px;
+  height: 6px;
+  background: #06b6d4;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
