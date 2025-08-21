@@ -263,6 +263,10 @@
   font-family: Arial, sans-serif;
 }
 
+.typewriter {
+  font-family: 'Fira Mono', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
+}
+
 @media (max-width: 600px) {
   .container {
     align-items: flex-start;
