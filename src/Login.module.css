@@ -23,40 +23,29 @@
 .loginBox h2 {
   margin-bottom: 20px;
   text-align: center;
-  color: #fafafa;
   font-weight: bold;
   font-size: 24px;
   letter-spacing: 0.5px;
-  overflow: hidden;
-  white-space: nowrap;
-  width: 0;
-  animation: typewriterLoop 7s infinite, blink 1s step-end infinite;
-  border-right: 2px solid #6366f1;
   margin-left: auto;
   margin-right: auto;
+  background: linear-gradient(90deg, #8000ff, #6366f1, #a78bfa, #4f46e5, #8000ff);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  animation: colorGradientMove 4s ease-in-out infinite;
 }
 
-@keyframes typewriterLoop {
+@keyframes colorGradientMove {
   0% {
-    width: 0;
-  }
-  20% {
-    width: 12ch; /* 12 caratteri per "CostyPlanner" */
-  }
-  80% {
-    width: 12ch; /* Mantiene il testo completo più a lungo */
-  }
-  100% {
-    width: 0; /* Cancella il testo per ricominciare */
-  }
-}
-
-@keyframes blink {
-  from, to {
-    border-color: transparent;
+    background-position: 0% 50%;
   }
   50% {
-    border-color: #6366f1;
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }
 
@@ -261,10 +250,6 @@
 .loggedInContainer {
   padding: 20px;
   font-family: Arial, sans-serif;
-}
-
-.typewriter {
-  font-family: 'Fira Mono', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
 }
 
 @media (max-width: 600px) {
