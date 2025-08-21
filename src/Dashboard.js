@@ -11,7 +11,7 @@ export default function Dashboard({ user, onLogout }) {
   const [showNewAppointment, setShowNewAppointment] = useState(false)
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
   const [viewFilter, setViewFilter] = useState('all') // 'all', 'mine', 'others', 'available'
-  const [selectedAppointment, setSelectedAppointment] = useState(null)
+  const [selectedAppointment, setSelectedAppointmentß] = useState(null)
   const [usersMap, setUsersMap] = useState({})
   // New appointment form state
   const [newTitle, setNewTitle] = useState('')
