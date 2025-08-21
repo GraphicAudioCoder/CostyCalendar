@@ -41,10 +41,10 @@
     width: 0;
   }
   20% {
-    width: 12ch; /* 12 caratteri per "CostyPlanner" */
+    width: 11ch; /* 12 caratteri per "CostyPlanner" */
   }
   80% {
-    width: 12ch; /* Mantiene il testo completo più a lungo */
+    width: 11ch; /* Mantiene il testo completo più a lungo */
   }
   100% {
     width: 0; /* Cancella il testo per ricominciare */
