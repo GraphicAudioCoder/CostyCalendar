@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import styles from './Login.module.css'
-import { supabase } from './supabaseClient'
+import { db } from './firebaseClient'
+import { collection, getDocs, addDoc, query, orderBy } from 'firebase/firestore'
 
 export default function Login({ onLogin }) {
   const [accounts, setAccounts] = useState([])
@@ -13,17 +14,20 @@ export default function Login({ onLogin }) {
   const [selectedAccount, setSelectedAccount] = useState(null)
 
   useEffect(() => {
-    const fetchAccounts = async () => {
-      setLoading(true)
-      const { data, error } = await supabase
-        .from('app_users')
-        .select('email, name')
-        .order('name', { ascending: true })
-      if (error) setError(error.message)
-      else setAccounts(data || [])
-      setLoading(false)
-    }
-    fetchAccounts()
+      const fetchAccounts = async () => {
+        setLoading(true)
+      try {
+        const q = query(collection(db, 'users'), orderBy('name', 'asc'));
+        const snapshot = await getDocs(q);
+        const users = snapshot.docs.map(doc => doc.data());
+        setAccounts(users);
+        setError('');
+      } catch (err) {
+        setError('Errore nel caricamento utenti');
+      }
+      setLoading(false);
+      };
+      fetchAccounts();
   }, [])
 
   const handleSelect = (account) => {
@@ -48,27 +52,22 @@ export default function Login({ onLogin }) {
       setError('Inserisci nome e email')
       return
     }
-
-    const { error } = await supabase
-      .from('app_users')
-      .upsert({ email, name }, { onConflict: 'email' })
-      .select()
-
-    if (error) {
-      setError(error.message)
-    } else {
-      setError('')
-      setShowNew(false)
-      setEmail('')
-      setName('')
-      // Aggiorna la lista account
-      const { data: updated } = await supabase
-        .from('app_users')
-        .select('email, name')
-        .order('name', { ascending: true })
-      setAccounts(updated || [])
-      onLogin({ email, name })
-    }
+      try {
+        // Aggiungi nuovo utente a Firestore
+        await addDoc(collection(db, 'users'), { email, name });
+        setError('');
+        setShowNew(false);
+        setEmail('');
+        setName('');
+        // Aggiorna la lista account
+        const q = query(collection(db, 'users'), orderBy('name', 'asc'));
+        const snapshot = await getDocs(q);
+        const updated = snapshot.docs.map(doc => doc.data());
+        setAccounts(updated || []);
+        onLogin({ email, name });
+      } catch (err) {
+        setError('Errore nella creazione account');
+      }
   }
 
   return (

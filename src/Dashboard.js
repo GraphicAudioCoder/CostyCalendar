@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import SimpleCalendar from './SimpleCalendar'
 import styles from './Dashboard.module.css'
-import { supabase } from './supabaseClient'
+import { db } from './firebaseClient'
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy, where } from 'firebase/firestore'
 
 export default function Dashboard({ user, onLogout }) {
   const [appointments, setAppointments] = useState([])
@@ -36,66 +37,59 @@ export default function Dashboard({ user, onLogout }) {
 
   const fetchUsers = async () => {
     try {
-      const { data, error } = await supabase
-        .from('app_users')
-        .select('email, name')
-      if (!error) {
-        const map = {}
-        (data || []).forEach(u => { map[u.email] = u.name })
-        setUsersMap(map)
-      }
+      const snapshot = await getDocs(collection(db, 'users'));
+      const map = {};
+      snapshot.docs.forEach(doc => {
+        const user = doc.data();
+        map[user.email] = user.name;
+      });
+      setUsersMap(map);
     } catch (e) {
-      console.error('Errore caricamento utenti', e)
+      console.error('Errore caricamento utenti', e);
     }
   }
 
   const fetchAllAppointments = async () => {
     setLoading(true)
     
-    // Ottieni tutti gli appuntamenti con i partecipanti (nome + email)
-    const { data, error } = await supabase
-      .from('appointments')
-      .select(`
-        *,
-        appointments_users(
-          user_email,
-          app_users!appointments_users_user_email_fkey(name, email)
-        ),
-        creator:created_by(name, email)
-      `)
-      .order('start_time', { ascending: true })
-    
-    if (error) {
-      console.error('Errore nel caricamento appuntamenti:', error)
-    } else {
-      setAllAppointments(data || [])
+    try {
+      const q = query(collection(db, 'appointments'), orderBy('start_time', 'asc'));
+      const snapshot = await getDocs(q);
+      const appointments = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      
+      setAllAppointments(appointments || []);
       
       // Filtra solo quelli a cui partecipo
-      const myAppointments = data?.filter(apt => 
-        apt.appointments_users.some(user_apt => user_apt.user_email === user.email)
-      ) || []
-      setAppointments(myAppointments)
+      const myAppointments = appointments?.filter(apt => 
+        apt.participants && apt.participants.includes(user.email)
+      ) || [];
+      setAppointments(myAppointments);
+    } catch (error) {
+      console.error('Errore nel caricamento appuntamenti:', error);
     }
-    setLoading(false)
+    setLoading(false);
   }
 
   const getDisplayedAppointments = () => {
     switch(viewFilter) {
       case 'mine':
-        // Tutti gli appuntamenti dove partecipo (anche se non creati da me)
+        // Tutti gli appuntamenti dove partecipo
         return allAppointments.filter(apt => 
-          apt.appointments_users.some(user_apt => user_apt.user_email === user.email)
+          apt.participants && apt.participants.includes(user.email)
         )
       case 'others':
         // Solo appuntamenti dove partecipo e c'è almeno un altro partecipante
         return allAppointments.filter(apt => 
-          apt.appointments_users.some(user_apt => user_apt.user_email === user.email) &&
-          apt.appointments_users.length > 1
+          apt.participants && apt.participants.includes(user.email) &&
+          apt.participants.length > 1
         )
       case 'available':
         return allAppointments.filter(apt => 
-          !apt.appointments_users.some(user_apt => user_apt.user_email === user.email) &&
-          apt.appointments_users.length < 2
+          apt.participants && !apt.participants.includes(user.email) &&
+          apt.participants.length < 2
         )
       default:
         return allAppointments
@@ -121,60 +115,49 @@ export default function Dashboard({ user, onLogout }) {
   }
 
   const joinAppointment = async (appointmentId) => {
-    const { data, error } = await supabase
-      .from('appointments_users')
-      .insert({
-        appointment_id: appointmentId,
-        user_email: user.email
-      })
-
-    if (error) {
-      console.error('Errore join:', error)
-    } else {
-      await fetchAllAppointments()
+    try {
+      const appointment = allAppointments.find(apt => apt.id === appointmentId);
+      if (appointment) {
+        const updatedParticipants = [...(appointment.participants || []), user.email];
+        await updateDoc(doc(db, 'appointments', appointmentId), {
+          participants: updatedParticipants
+        });
+        await fetchAllAppointments();
+      }
+    } catch (error) {
+      console.error('Errore join:', error);
     }
   }
 
   const leaveAppointment = async (appointmentId) => {
-    // remove participant
-    const { data, error } = await supabase
-      .from('appointments_users')
-      .delete()
-      .eq('appointment_id', appointmentId)
-      .eq('user_email', user.email)
-
-    if (error) {
-      console.error('Errore leave:', error)
-      return
-    }
-
-    // Check remaining participants
-    const { data: remaining, error: remErr } = await supabase
-      .from('appointments_users')
-      .select('id')
-      .eq('appointment_id', appointmentId)
-
-    if (!remErr) {
-      if (!remaining || remaining.length === 0) {
-        // delete appointment if no participants remain
-        const { error: delErr } = await supabase
-          .from('appointments')
-          .delete()
-          .eq('id', appointmentId)
-        if (delErr) console.error('Errore eliminazione appuntamento vuoto:', delErr)
+    try {
+      const appointment = allAppointments.find(apt => apt.id === appointmentId);
+      if (appointment) {
+        const updatedParticipants = (appointment.participants || []).filter(email => email !== user.email);
+        
+        if (updatedParticipants.length === 0) {
+          // Elimina l'appuntamento se non ci sono più partecipanti
+          await deleteDoc(doc(db, 'appointments', appointmentId));
+        } else {
+          // Aggiorna la lista partecipanti
+          await updateDoc(doc(db, 'appointments', appointmentId), {
+            participants: updatedParticipants
+          });
+        }
+        await fetchAllAppointments();
       }
+    } catch (error) {
+      console.error('Errore leave:', error);
     }
-
-    await fetchAllAppointments()
   }
 
   const deleteAppointment = async (appointmentId) => {
-    const { error } = await supabase
-      .from('appointments')
-      .delete()
-      .eq('id', appointmentId)
-    if (error) console.error('Errore delete appointment:', error)
-    else await fetchAllAppointments()
+    try {
+      await deleteDoc(doc(db, 'appointments', appointmentId));
+      await fetchAllAppointments();
+    } catch (error) {
+      console.error('Errore delete appointment:', error);
+    }
   }
 
   // Edit appointment
@@ -206,50 +189,50 @@ export default function Dashboard({ user, onLogout }) {
       const [eh, em] = editEndTime.split(':').map(s => parseInt(s, 10))
       const start = new Date(y, m - 1, d, sh, sm, 0)
       const end = new Date(y, m - 1, d, eh, em, 0)
-      const { error } = await supabase
-        .from('appointments')
-        .update({ title: editTitle, description: editDescription, start_time: start.toISOString(), end_time: end.toISOString() })
-        .eq('id', editingAppointment.id)
-      if (error) console.error('Errore update:', error)
+      
+      await updateDoc(doc(db, 'appointments', editingAppointment.id), {
+        title: editTitle,
+        description: editDescription,
+        start_time: start.toISOString(),
+        end_time: end.toISOString()
+      });
+      
       setEditingAppointment(null)
       await fetchAllAppointments()
-    } catch (err) { console.error(err) }
+    } catch (err) { 
+      console.error(err) 
+    }
   }
 
   const createAppointment = async (e) => {
     e.preventDefault()
     try {
-  // Build Date objects in local timezone from date + time input components
-  const [y, m, d] = newDate.split('-').map(s => parseInt(s, 10))
-  const [sh, sm] = newStartTime.split(':').map(s => parseInt(s, 10))
-  const [eh, em] = newEndTime.split(':').map(s => parseInt(s, 10))
-  const start = new Date(y, m - 1, d, sh, sm, 0)
-  const end = new Date(y, m - 1, d, eh, em, 0)
-      const { data, error } = await supabase
-        .from('appointments')
-        .insert({
-          title: newTitle,
-          description: newDescription,
-          start_time: start.toISOString(),
-          end_time: end.toISOString(),
-          created_by: user.email
-        })
-        .select()
+      // Build Date objects in local timezone from date + time input components
+      const [y, m, d] = newDate.split('-').map(s => parseInt(s, 10))
+      const [sh, sm] = newStartTime.split(':').map(s => parseInt(s, 10))
+      const [eh, em] = newEndTime.split(':').map(s => parseInt(s, 10))
+      const start = new Date(y, m - 1, d, sh, sm, 0)
+      const end = new Date(y, m - 1, d, eh, em, 0)
+      
+      await addDoc(collection(db, 'appointments'), {
+        title: newTitle,
+        description: newDescription,
+        start_time: start.toISOString(),
+        end_time: end.toISOString(),
+        created_by: user.email,
+        participants: [user.email] // Il creatore è automaticamente partecipante
+      });
 
-      if (error) {
-        console.error('Errore creazione appuntamento:', error)
-      } else {
-        // refresh
-        await fetchAllAppointments()
-        setShowNewAppointment(false)
-        setNewTitle('')
-        setNewDescription('')
-        // save last used times so next time the form can default to them
-        try {
-          localStorage.setItem('costy_last_times', JSON.stringify({ start: newStartTime, end: newEndTime }))
-        } catch (e) {
-          // ignore
-        }
+      // refresh
+      await fetchAllAppointments()
+      setShowNewAppointment(false)
+      setNewTitle('')
+      setNewDescription('')
+      // save last used times so next time the form can default to them
+      try {
+        localStorage.setItem('costy_last_times', JSON.stringify({ start: newStartTime, end: newEndTime }))
+      } catch (e) {
+        // ignore
       }
     } catch (err) {
       console.error(err)
@@ -293,11 +276,11 @@ export default function Dashboard({ user, onLogout }) {
   }
 
   const isUserParticipating = (appointment) => {
-    return appointment.appointments_users.some(user_apt => user_apt.user_email === user.email)
+    return appointment.participants && appointment.participants.includes(user.email)
   }
 
   const canJoinAppointment = (appointment) => {
-    return !isUserParticipating(appointment) && appointment.appointments_users.length < 2
+    return !isUserParticipating(appointment) && appointment.participants && appointment.participants.length < 2
   }
 
   return (
@@ -375,16 +358,16 @@ export default function Dashboard({ user, onLogout }) {
                       </div>
                       <div className={styles.appointmentDescription}>{apt.description}</div>
                       <div className={styles.appointmentMeta}>
-                        <div className={styles.creator}>Creatore: {apt.creator?.name || apt.created_by}</div>
+                        <div className={styles.creator}>Creatore: {usersMap[apt.created_by] || apt.created_by}</div>
                         <div className={styles.participants}>
                           Partecipanti:
                           <ul style={{margin: '4px 0 0 0', paddingLeft: '18px'}}>
-                            {apt.appointments_users.map(u => {
-                              const nome = u.app_users?.name || usersMap[u.user_email] || '';
+                            {(apt.participants || []).map(email => {
+                              const nome = usersMap[email] || '';
                               return (
-                                <li key={u.user_email}>
-                                  <span>{nome || u.user_email}</span><br />
-                                  <span style={{fontSize: '0.95em', color: '#555'}}>{u.user_email}</span>
+                                <li key={email}>
+                                  <span>{nome || email}</span><br />
+                                  <span style={{fontSize: '0.95em', color: '#555'}}>{email}</span>
                                 </li>
                               );
                             })}
