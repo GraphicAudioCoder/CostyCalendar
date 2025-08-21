@@ -95,7 +95,7 @@ export default function Login({ onLogin }) {
                 ))
               )}
             </div>
-            <button className={styles.loginButton} onClick={() => setShowNew(true)}>Nuovo account</button>
+            <button className={styles.loginButton} onClick={() => setShowNew(true)}>Nuovo accounts</button>
           </>
         ) : (
           <form onSubmit={handleNewAccount}>
