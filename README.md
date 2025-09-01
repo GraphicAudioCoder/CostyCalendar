@@ -44,11 +44,3 @@ CostyCalendar is an application designed to help Generali Italia salespeople man
    ```bash
    npm start
    ```
-
-## Contributions
-
-Contributions and suggestions are welcome! Feel free to open a pull request or report issues.
-
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for more details.
